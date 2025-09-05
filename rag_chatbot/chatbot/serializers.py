@@ -41,3 +41,27 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return user
 
 
+class DocumentUploadSerializer(serializers.Serializer):
+    files = serializers.ListField(
+        child=serializers.FileField(), allow_empty=False, write_only=True
+    )
+    source = serializers.CharField(required=False, allow_blank=True)
+
+    def validate_files(self, value):
+        max_size_mb = 20
+        for f in value:
+            if f.size > max_size_mb * 1024 * 1024:
+                raise serializers.ValidationError(
+                    f"File {f.name} exceeds {max_size_mb}MB limit."
+                )
+        return value
+
+
+class QuerySerializer(serializers.Serializer):
+    query = serializers.CharField()
+    top_k = serializers.IntegerField(required=False, min_value=1, default=4)
+    # Optional simple metadata filter
+    source = serializers.CharField(required=False, allow_blank=True)
+    generate = serializers.BooleanField(required=False, default=True)
+    temperature = serializers.FloatField(required=False, min_value=0.0, max_value=2.0, default=0.7)
+

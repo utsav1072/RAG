@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uf@_@k1_*nyunz60l957$i-$!#g5)9n7soxto^tqa63-+$hp4r'
+SECRET_KEY = os.environ.get('DJANGO_SECRETE_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -38,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'chatbot',
     'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,3 +148,45 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Media files for uploads
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Chroma persistence directory
+CHROMA_PERSIST_DIR = os.path.join(BASE_DIR, 'chroma')
+
+# RAG configuration
+# Provider can be 'openai' or 'huggingface'. Default to huggingface to avoid API keys.
+RAG_EMBEDDINGS_PROVIDER = os.environ.get('RAG_EMBEDDINGS_PROVIDER', 'huggingface')
+RAG_HF_MODEL_NAME = os.environ.get('RAG_HF_MODEL_NAME', 'sentence-transformers/all-MiniLM-L6-v2')
+
+# LLM for generation
+RAG_LLM_PROVIDER = os.environ.get('RAG_LLM_PROVIDER', 'huggingface')
+RAG_OPENAI_MODEL = os.environ.get('RAG_OPENAI_MODEL', 'gpt-4o-mini')
+RAG_HF_LLM_MODEL_NAME = os.environ.get('RAG_HF_LLM_MODEL_NAME', 'google/flan-t5-base')
+RAG_LLM_MAX_TOKENS = int(os.environ.get('RAG_LLM_MAX_TOKENS', '512'))
+
+# Explicit Gemini model to use for generation
+RAG_LLM_MODEL = os.environ.get('RAG_LLM_MODEL', 'gemini-2.5-flash')
+
+# Gemini API key
+from dotenv import load_dotenv
+load_dotenv()
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
+# Retrieval and ranking knobs
+RAG_FETCH_K = int(os.environ.get('RAG_FETCH_K', '20'))
+RAG_SCORE_THRESHOLD = float(os.environ.get('RAG_SCORE_THRESHOLD', '0.2'))
+
+# CORS settings
+# Allow during development from local frontends; tighten in production
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]
+
+# If you need cookies/Authorization headers across origins
+CORS_ALLOW_CREDENTIALS = True
