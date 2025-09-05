@@ -116,6 +116,14 @@ export const RAGAPI = {
     })
     return data
   },
+  async getDocuments() {
+    const { data } = await api.get('/documents/')
+    return data
+  },
+  async deleteDocument(documentId) {
+    const { data } = await api.delete(`/documents/${documentId}/delete/`)
+    return data
+  },
 }
 
 export function getTokens() {

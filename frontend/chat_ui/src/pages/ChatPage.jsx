@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RAGAPI } from '../auth/api'
 import { useAuth } from '../auth/AuthContext'
+import DocumentSidebar from '../components/DocumentSidebar'
 
 export default function ChatPage() {
   const { user, logout } = useAuth()
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true) // Default to open on desktop
   const endRef = useRef(null)
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
@@ -44,16 +46,39 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="glass border-b border-white/20 p-4 flex items-center justify-between">
+    <div className="h-screen flex bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Sidebar */}
+      <DocumentSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col lg:ml-0">
+        {/* Header */}
+        <header className="glass border-b border-white/20 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="hidden lg:flex items-center gap-2 px-3 py-2 bg-white/50 hover:bg-white/70 rounded-lg transition-all duration-200 text-sm font-medium"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Documents
+          </button>
           <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">R</span>
           </div>
           <h1 className="text-xl font-bold gradient-text">RAG Chat</h1>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/70 rounded-lg transition-all duration-200 text-sm font-medium lg:hidden"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Documents
+          </button>
           <Link 
             to="/upload" 
             className="flex items-center gap-2 px-4 py-2 bg-white/50 hover:bg-white/70 rounded-lg transition-all duration-200 text-sm font-medium"
@@ -199,6 +224,7 @@ export default function ChatPage() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   )
 }
