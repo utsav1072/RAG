@@ -14,14 +14,12 @@ A sophisticated **Retrieval-Augmented Generation (RAG)** chatbot that allows use
 - [Features](#features)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
-- [Screenshots & Demo](#screenshots--demo)
+- [Screenshots](#screenshots)
 - [Installation & Setup](#installation--setup)
 - [API Documentation](#api-documentation)
 - [Usage Guide](#usage-guide)
 - [Configuration](#configuration)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## 🔍 What is RAG?
 
