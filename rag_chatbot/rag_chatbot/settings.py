@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRETE_KEY', 'django-insecure-uf@_@k1_*nyunz60l957$i-$!#g5)9n7soxto^tqa63-+$hp4r')
+SECRET_KEY = os.environ.get('DJANGO_SECRETE_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -157,7 +157,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CHROMA_PERSIST_DIR = os.path.join(BASE_DIR, 'chroma')
 
 # RAG configuration
-# Provider can be 'openai' or 'huggingface'. Default to huggingface to avoid API keys.
+# Provider can be 'openai' or 'huggingface'. Default huggingface.
 RAG_EMBEDDINGS_PROVIDER = os.environ.get('RAG_EMBEDDINGS_PROVIDER', 'huggingface')
 RAG_HF_MODEL_NAME = os.environ.get('RAG_HF_MODEL_NAME', 'sentence-transformers/all-MiniLM-L6-v2')
 

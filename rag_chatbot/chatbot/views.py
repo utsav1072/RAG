@@ -52,12 +52,12 @@ def _get_embeddings():
     model_name = getattr(
         settings, 'RAG_HF_MODEL_NAME', 'sentence-transformers/all-MiniLM-L6-v2'
     )
-    return HuggingFaceEmbeddings(model_name=model_name)
+    return HuggingFaceEmbeddings(model_name=model_name) # embeddings Object
 
 
 def _get_vectorstore():
     persist_dir = getattr(settings, 'CHROMA_PERSIST_DIR', os.path.join(settings.BASE_DIR, 'chroma'))
-    embeddings = _get_embeddings()
+    embeddings = _get_embeddings() # getting embeddings Object
     return Chroma(collection_name='documents', embedding_function=embeddings, persist_directory=persist_dir)
 
 
@@ -80,7 +80,7 @@ def _load_file_to_documents(file_path: str, source: str):
     # attach simple source metadata
     for d in docs:
         d.metadata = {**d.metadata, 'source': source or os.path.basename(file_path)}
-    return docs
+    return docs # returning docs Object
 
 
 class DocumentUploadView(APIView):
