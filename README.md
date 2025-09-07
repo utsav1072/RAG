@@ -163,7 +163,7 @@ A sophisticated **Retrieval-Augmented Generation (RAG)** chatbot that allows use
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/utsav1072/RAG/
 cd RAG
 ```
 
