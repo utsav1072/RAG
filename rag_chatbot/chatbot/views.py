@@ -191,6 +191,12 @@ class QueryView(APIView):
             return Response({'results': payload})
 
         answer, citations = self._generate_answer(query, top_results, temperature)
+        # If the answer contains 'i don't know' (case-insensitive), clear citations
+        if isinstance(answer, str) and "i don't know" in answer.lower():
+            citations = []
+        # Also, if there are no context blocks, citations should be empty
+        if not top_results:
+            citations = []
         return Response({'results': payload, 'answer': answer, 'citations': citations})
 
     def _generate_answer(self, query: str, results: List, temperature: float):
