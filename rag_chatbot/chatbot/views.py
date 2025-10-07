@@ -27,10 +27,7 @@ import os
 import time
 from typing import List
 
-try:
-    from transformers import pipeline  # noqa: F401  # kept for potential future use
-except Exception:  # pragma: no cover
-    pipeline = None
+pipeline = None
 
 
 class RegisterView(generics.CreateAPIView):
