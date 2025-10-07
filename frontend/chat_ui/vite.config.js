@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'https://rag-fx2h.onrender.com',
         changeOrigin: true,
       },
     },
