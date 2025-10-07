@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRETE_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','https://rag-fx2h.onrender.com']
 
 
 # Application definition
