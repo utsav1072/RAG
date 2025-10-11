@@ -16,7 +16,7 @@ from .serializers import (
     DocumentUploadSerializer,
     QuerySerializer,
 )
-from .models import Document
+from .models import Document, Chat
 
 # LangChain / Chroma imports
 # Prefer new standalone integration packages if available (avoids LangChain deprecation warnings)
@@ -205,6 +205,10 @@ class QueryView(APIView):
         # Also, if there are no context blocks, citations should be empty
         if not top_results:
             citations = []
+        # save the chat into DB
+        chatObj = Chat(user_id=request.user.id, sender=query, chatBotResponse=answer, citations = citations)
+        chatObj.save()
+        print(citations)
         return Response({'results': payload, 'answer': answer, 'citations': citations})
 
     def _generate_answer(self, query: str, results: List, temperature: float):

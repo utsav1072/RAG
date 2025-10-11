@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.conf import settings
-from .models import Document
+from .models import Document, Chat
 import os
 import shutil
 
@@ -15,6 +15,7 @@ User = get_user_model()
 
 # Unregister the default User admin and register our custom one
 admin.site.unregister(User)
+admin.site.register(Chat)
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):

@@ -221,6 +221,36 @@ python manage.py runserver
 
 The backend will be available at `http://localhost:8000`
 
+## ✅ Running Backend Tests
+
+There are unit tests for the Django backend in the `chatbot` app: `rag_chatbot/chatbot/tests.py`.
+
+To run the backend tests locally:
+
+1. Activate the Python virtual environment (example):
+
+```powershell
+# Windows (PowerShell)
+venv\Scripts\Activate
+```
+
+```bash
+# macOS / Linux
+source venv/bin/activate
+```
+
+2. From the project root or the `rag_chatbot` directory run:
+
+```powershell
+# From project root (PowerShell)
+cd rag_chatbot; python manage.py test chatbot
+
+# Or run all tests
+python manage.py test
+```
+
+If you use a different Python environment or virtualenv tool, activate it accordingly before running the tests. Test output will appear in the terminal; failing tests will show tracebacks to help diagnose issues.
+
 ### 3. Frontend Setup
 
 #### Navigate to Frontend Directory
