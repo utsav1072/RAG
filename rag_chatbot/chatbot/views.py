@@ -6,7 +6,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 try:
-    from langchain.chat_models import init_chat_model  # LangChain unified chat interface
+    from langchain.chat_models import init_chat_model
 except Exception:  # pragma: no cover
     init_chat_model = None
 
@@ -19,8 +19,16 @@ from .serializers import (
 from .models import Document
 
 # LangChain / Chroma imports
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+# Prefer new standalone integration packages if available (avoids LangChain deprecation warnings)
+
+from langchain_huggingface import HuggingFaceEmbeddings  # type: ignore
+
+
+# try:
+from langchain_chroma import Chroma  # type: ignore
+# except Exception:
+#     # Fall back to community wrapper if the dedicated package isn't installed
+#     from langchain_community.vectorstores import Chroma 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import TextLoader, PyPDFLoader
 import os
@@ -136,8 +144,11 @@ class DocumentUploadView(APIView):
         vectordb = _get_vectorstore()
         vectordb.add_documents(all_chunks)
         try:
-            vectordb.persist()
+            persist_fn = getattr(vectordb, 'persist', None)
+            if callable(persist_fn):
+                persist_fn()
         except Exception:
+            # If persistence fails or isn't necessary, continue without blocking the upload
             pass
 
         return Response({
@@ -324,11 +335,13 @@ class DeleteDocumentView(APIView):
                     # Delete the documents by their IDs
                     collection.delete(ids=results['ids'])
                     
-                    # Persist the changes
+                    # Persist the changes only if the vectorstore supports it (older Chroma versions)
                     try:
-                        vectordb.persist()
+                        persist_fn = getattr(vectordb, 'persist', None)
+                        if callable(persist_fn):
+                            persist_fn()
                     except Exception:
-                        pass  # Persist might not be available in all Chroma versions
+                        pass  # Not critical; newer Chroma persists automatically
                         
             except Exception as e:
                 # Fallback: if the above doesn't work, we'll log the error but continue

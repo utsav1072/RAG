@@ -33,3 +33,9 @@ class Document(models.Model):
                 return f"{size:.1f} {unit}"
             size /= 1024.0
         return f"{size:.1f} TB"
+
+class Chat(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chats')
+    sender = models.CharField(max_length=100000)
+    chatBotResponse = models.CharField(max_length=10000000)
+    created_at = models.DateTimeField(auto_now=True)
