@@ -17,6 +17,7 @@ venv/
 Thumbs.db
 .idea/
 .vscode/
+test_files/
 
 # Django
 *.log

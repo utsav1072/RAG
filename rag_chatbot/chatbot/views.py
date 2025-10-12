@@ -156,7 +156,7 @@ class DocumentUploadView(APIView):
             'files': [os.path.basename(p) for p in saved_paths], 
             'chunks': len(all_chunks),
             'document_ids': [doc.id for doc in document_instances]
-        })
+        }, status=status.HTTP_201_CREATED)
 
 
 class QueryView(APIView):
@@ -208,7 +208,6 @@ class QueryView(APIView):
         # save the chat into DB
         chatObj = Chat(user_id=request.user.id, sender=query, chatBotResponse=answer, citations = citations)
         chatObj.save()
-        print(citations)
         return Response({'results': payload, 'answer': answer, 'citations': citations})
 
     def _generate_answer(self, query: str, results: List, temperature: float):
